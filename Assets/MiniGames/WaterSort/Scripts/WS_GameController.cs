@@ -14,6 +14,8 @@ namespace YugantLibrary.MiniGame.WaterSort
         [CustomReadOnly] [SerializeField] string folderToPickLevel = "WaterSort_Levels";
         [CustomReadOnly] [SerializeField] string levelPrefix = "Level_";
         [SerializeField] int totalLevels = 5;
+        [CustomReadOnly] [SerializeField] float camSize = 7f;
+
 
         [Header("References")]
         [SerializeField] Transform levelContainer;
@@ -21,7 +23,6 @@ namespace YugantLibrary.MiniGame.WaterSort
 
 
         public bool isTesting;
-
         public int currLevelId = 1;
 
 
@@ -49,6 +50,11 @@ namespace YugantLibrary.MiniGame.WaterSort
             {
                 CreateLevel();
             }
+        }
+
+        public float GetCamSize()
+        {
+            return camSize;
         }
 
         public void CreateLevel()

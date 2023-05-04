@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: TubeMaskLayer
+    uniqueID: 542908341
+    locked: 0
