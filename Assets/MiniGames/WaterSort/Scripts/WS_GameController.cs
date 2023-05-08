@@ -48,6 +48,10 @@ namespace YugantLibrary.MiniGame.WaterSort
             {
                 CreateLevel();
             }
+            else
+            {
+                currLevelId = int.Parse(currLevel.name.Split('_')[1]);
+            }
         }
 
       

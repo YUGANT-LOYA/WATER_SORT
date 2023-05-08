@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using YugantLibrary.MyCustomAttributes;
 
@@ -8,7 +9,7 @@ namespace YugantLibrary.MiniGame.WaterSort
     public class DataHandler : MonoBehaviour
     {
         public static DataHandler instance;
-        
+
         [CustomReadOnly] [SerializeField] float camSize = 7f;
 
         [Header("Main Content Frame Info")]
@@ -50,10 +51,12 @@ namespace YugantLibrary.MiniGame.WaterSort
         {
             return maxHorizontalTubePlacement;
         }
+
         public float GetVerticalFrame()
         {
             return maxVerticalTubePlacement;
         }
+
         public Vector2 GetTubeHolderEndPos()
         {
             return new Vector2(maxHorizontalTubePlacement / 2, maxVerticalTubePlacement / 2);
@@ -61,7 +64,22 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         public List<Color> TotalColorsForTubes()
         {
-            return setOfColorsInTube;
+            return new List<Color>(setOfColorsInTube);
+        }
+
+        public List<Color> GetRandomColor(int num)
+        {
+            List<Color> colorsList = new List<Color>();
+            List<Color> totalColorList = TotalColorsForTubes();
+
+            for (int i = 0; i < num; i++)
+            {
+                int randomIndex = Random.Range(0, totalColorList.Count);
+                colorsList.Add(totalColorList[randomIndex]);
+                totalColorList.RemoveAt(randomIndex);
+            }
+
+            return colorsList;
         }
 
         private void OnDrawGizmos()

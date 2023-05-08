@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-
 namespace YugantLibrary.MiniGame.WaterSort
 {
     public class WS_LevelController : MonoBehaviour
@@ -13,25 +12,22 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         [Range(3, 16)]
         public int totalTubeCount;
-
         public bool customizeEmptyTubes;
 
         [ShowIf("customizeEmptyTubes")]
-        [Range(0, 4)]
-        public int emptyTubeCount;
+        [Range(1, 4)]
+        public int emptyTubeCount = 2;
 
         [Header("Tube Placement Info")]
         public Transform tubeContainerHolder;
         int totalTubeContainers;
 
+        [Header("TubeColors")]
+        [SerializeField] List<Color> colorsUsedInTubes;
+
         private void Awake()
         {
             Init();
-        }
-
-        void Start()
-        {
-
         }
 
         void Init()
@@ -50,8 +46,6 @@ namespace YugantLibrary.MiniGame.WaterSort
                 }
             }
 
-            Debug.Log("Total Tube Container : " + totalTubeContainers);
-
             bool isLastContainerHaveLessTubes = totalTubeCount % DataHandler.instance.maxTubeInRow > 0 ? true : false;
 
             for (int i = 1; i <= totalTubeContainers; i++)
@@ -65,7 +59,6 @@ namespace YugantLibrary.MiniGame.WaterSort
                 if (isLastContainerHaveLessTubes && i == totalTubeContainers)
                 {
                     totalTubes = totalTubeCount % DataHandler.instance.maxTubeInRow;
-                    Debug.Log("TOTAL TUBES : " + totalTubes);
                 }
 
 
@@ -79,6 +72,7 @@ namespace YugantLibrary.MiniGame.WaterSort
             }
 
             SetTubeContainerPosition();
+            AssignColorsToTubeElements();
         }
 
         void SetTubePositions(Transform tubeContainer, int tubesInContainer)
@@ -88,10 +82,8 @@ namespace YugantLibrary.MiniGame.WaterSort
 
             if (tubesInContainer % 2 != 0)
             {
-
                 for (int i = 1; i < tubeContainer.childCount; i++)
                 {
-
                     if (i % 2 != 0)
                     {
                         tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x - (tempCounter * DataHandler.instance.tubeGap) - tube.transform.localScale.x / 2, containerPos.y);
@@ -108,18 +100,14 @@ namespace YugantLibrary.MiniGame.WaterSort
                 float temp = DataHandler.instance.tubeGap / 2;
                 for (int i = 0; i < tubeContainer.childCount; i++)
                 {
-
                     if (i % 2 != 0)
                     {
                         tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x - temp, containerPos.y);
-                        Debug.Log($"Tube Pos {i} :  {tubeContainer.GetChild(i).transform.position}");
                         temp += DataHandler.instance.tubeGap;
                     }
                     else
                     {
                         tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x + temp, containerPos.y);
-                        Debug.Log($"Tube Pos {i} :  {tubeContainer.GetChild(i).transform.position}");
-
                     }
                 }
             }
@@ -128,7 +116,7 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         void SetTubeContainerPosition()
         {
-            float temp = DataHandler.instance.tubeContainerGap/2;
+            float temp = DataHandler.instance.tubeContainerGap / 2;
             if (totalTubeContainers % 2 == 0)
             {
                 for (int i = 0; i < totalTubeContainers; i++)
@@ -136,13 +124,13 @@ namespace YugantLibrary.MiniGame.WaterSort
                     Vector3 tubeContainerPos = tubeContainerHolder.transform.position;
                     if (i % 2 != 0)
                     {
-                        tubeContainerHolder.transform.GetChild(i).position = new Vector3(tubeContainerPos.x, tubeContainerPos.y -  temp); 
+                        tubeContainerHolder.transform.GetChild(i).position = new Vector3(tubeContainerPos.x, tubeContainerPos.y - temp);
                         temp += DataHandler.instance.tubeContainerGap;
                     }
                     else
                     {
                         tubeContainerHolder.transform.GetChild(i).position = new Vector3(tubeContainerPos.x, tubeContainerPos.y + temp);
-                        
+
                     }
                 }
             }
@@ -165,6 +153,52 @@ namespace YugantLibrary.MiniGame.WaterSort
                     }
                 }
             }
+        }
+
+        void AssignColorsToTubeElements()
+        {
+            int colorCount = totalTubeCount - emptyTubeCount;
+            colorsUsedInTubes = DataHandler.instance.GetRandomColor(colorCount);
+            int tubeFilledCount = colorCount;
+            int[] colorAssigned = new int[colorCount];
+
+            for (int i = 0; i < tubeContainerHolder.childCount; i++)
+            {
+                Transform tubeContainer = tubeContainerHolder.GetChild(i);
+
+                for (int j = 0; j < tubeContainer.childCount; j++)
+                {
+                    Tube tubeScript = tubeContainer.GetChild(j).GetComponent<Tube>();
+                    if (tubeFilledCount > 0)
+                    {
+                        for (int k = 0; k < 4; k++)
+                        {
+                            SpriteRenderer spriteRenderer = tubeScript.waterPartContainer.GetChild(k).GetComponent<SpriteRenderer>();
+
+                            int index = SelectRandomIndex(colorAssigned);
+                            //Debug.Log("Color : " + colorsUsedInTubes[index]);
+                            spriteRenderer.color = colorsUsedInTubes[index];
+                            colorAssigned[index]++;
+                        }
+                        tubeFilledCount--;
+                    }
+                }
+            }
+        }
+
+
+        int SelectRandomIndex(int[] list)
+        {
+            int randomIndex = Random.Range(0, list.Length);
+
+            while (list[randomIndex] > 4)
+            {
+                return SelectRandomIndex(list);
+            }
+
+            Debug.Log($"RANDOM INDEX : {randomIndex} , COUNT : {list[randomIndex]}");
+            return randomIndex;
+
         }
     }
 }

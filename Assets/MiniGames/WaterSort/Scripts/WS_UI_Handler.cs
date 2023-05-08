@@ -7,7 +7,7 @@ namespace YugantLibrary.MiniGame.WaterSort
 {
     public class WS_UI_Handler : MonoBehaviour
     {
-        public Button prevButton,nextButton;
+        public Button prevButton,nextButton,replayButton;
 
         private void Awake()
         {
@@ -40,6 +40,11 @@ namespace YugantLibrary.MiniGame.WaterSort
                 WS_GameController.instance.CreateLevel();
                 
             }
+        }
+
+        public void ReplayButton()
+        {
+            WS_GameController.instance.CreateLevel();
         }
 
         void Update_Prev_Next_Button()
