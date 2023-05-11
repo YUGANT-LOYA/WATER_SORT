@@ -80,5 +80,6 @@ MonoBehaviour:
   totalTubeCount: 6
   customizeEmptyTubes: 1
   emptyTubeCount: 1
+  diffcultyOfcurrLevel: 0
   tubeContainerHolder: {fileID: 2435957345787348700}
   colorsUsedInTubes: []

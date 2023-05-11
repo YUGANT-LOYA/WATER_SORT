@@ -8,15 +8,8 @@ namespace YugantLibrary.MiniGame.WaterSort
     {
         public GameObject waterPart;
         public Transform waterPartContainer;
+        public Stack tubeColorStack;
+      
 
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-
-        }
     }
 }

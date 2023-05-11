@@ -10,6 +10,32 @@ namespace YugantLibrary.MiniGame.WaterSort
     {
         public static DataHandler instance;
 
+        public enum DIFFICULTY
+        {
+            NONE,
+            VERY_EASY,
+            EASY,
+            MODERATE,
+            CHALLENGING,
+            EXPERT
+        }
+
+        public enum GAME_MODE
+        {
+            CLASSIC,
+            SURVIVAL
+        }
+
+
+        [CustomReadOnly][SerializeField] DIFFICULTY currDifficulty = DIFFICULTY.VERY_EASY;
+        [SerializeField] GAME_MODE gameMode = GAME_MODE.CLASSIC;
+
+        public int moveToCompleteCurrLevel
+        {
+            get  {  return moveToCompleteCurrLevel;     }
+            set  {  moveToCompleteCurrLevel = value;    }
+        }
+
         [CustomReadOnly] [SerializeField] float camSize = 7f;
 
         [Header("Main Content Frame Info")]
@@ -29,7 +55,6 @@ namespace YugantLibrary.MiniGame.WaterSort
         {
             CreateSingleton();
         }
-
         void CreateSingleton()
         {
             if (instance == null)
@@ -41,32 +66,26 @@ namespace YugantLibrary.MiniGame.WaterSort
                 Destroy(this.gameObject);
             }
         }
-
         public float GetCamSize()
         {
             return camSize;
         }
-
         public float GetHorizontalFrame()
         {
             return maxHorizontalTubePlacement;
         }
-
         public float GetVerticalFrame()
         {
             return maxVerticalTubePlacement;
         }
-
         public Vector2 GetTubeHolderEndPos()
         {
             return new Vector2(maxHorizontalTubePlacement / 2, maxVerticalTubePlacement / 2);
         }
-
         public List<Color> TotalColorsForTubes()
         {
             return new List<Color>(setOfColorsInTube);
         }
-
         public List<Color> GetRandomColor(int num)
         {
             List<Color> colorsList = new List<Color>();
@@ -81,6 +100,16 @@ namespace YugantLibrary.MiniGame.WaterSort
 
             return colorsList;
         }
+        public DIFFICULTY GetCurrentDifficulty()
+        {
+            return currDifficulty;
+        }
+        public GAME_MODE GetGameMode()
+        {
+            return gameMode;
+        }
+
+
 
         private void OnDrawGizmos()
         {

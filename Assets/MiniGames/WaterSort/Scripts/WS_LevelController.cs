@@ -8,30 +8,43 @@ namespace YugantLibrary.MiniGame.WaterSort
 {
     public class WS_LevelController : MonoBehaviour
     {
-        [Header("Tube Info")]
-        public GameObject tube;
-
+        [BoxGroup("DIFFICULTY OF LEVEL")]
         [Range(3, 16)]
         public int totalTubeCount;
+        [BoxGroup("DIFFICULTY OF LEVEL")]
         public bool customizeEmptyTubes;
-
+        [BoxGroup("DIFFICULTY OF LEVEL")]
         [ShowIf("customizeEmptyTubes")]
         [Range(1, 4)]
         public int emptyTubeCount = 2;
+        [BoxGroup("DIFFICULTY OF LEVEL")]
+        public DataHandler.DIFFICULTY diffcultyOfcurrLevel = DataHandler.DIFFICULTY.NONE;
+        [BoxGroup("DIFFICULTY OF LEVEL")]
+        public int totalMovesToFinishLevel = 5;
+        [BoxGroup("DIFFICULTY OF LEVEL")]
+        public float levelTimer = 0f;
 
-        [Header("Tube Placement Info")]
+        [Header("References")]
+        public GameObject tube;
         public Transform tubeContainerHolder;
         int totalTubeContainers;
-
-        [Header("TubeColors")]
         [SerializeField] List<Color> colorsUsedInTubes;
         int colorAssignIndex = 0;
 
         private void Awake()
         {
+            if (diffcultyOfcurrLevel == DataHandler.DIFFICULTY.NONE)
+            {
+                diffcultyOfcurrLevel = DataHandler.instance.GetCurrentDifficulty();
+            }
+
             Init();
+            SetTubeContainerPosition();
+            AssignColorsToEachTube();
+            UseMoveToRandomizeColorsInTube();
         }
 
+        #region Creating Tubes at RunTime with Given Data
         void Init()
         {
             if (totalTubeCount < DataHandler.instance.maxTubeInRow)
@@ -72,50 +85,7 @@ namespace YugantLibrary.MiniGame.WaterSort
 
                 SetTubePositions(tubeContainer.transform, totalTubes);
             }
-
-            SetTubeContainerPosition();
-            AssignColorsToTubeElements();
         }
-
-        void SetTubePositions(Transform tubeContainer, int tubesInContainer)
-        {
-            int tempCounter = 1;
-            Vector3 containerPos = tubeContainer.transform.position;
-
-            if (tubesInContainer % 2 != 0)
-            {
-                for (int i = 1; i < tubeContainer.childCount; i++)
-                {
-                    if (i % 2 != 0)
-                    {
-                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x - (tempCounter * DataHandler.instance.tubeGap) - tube.transform.localScale.x / 2, containerPos.y);
-                    }
-                    else
-                    {
-                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x + (tempCounter * DataHandler.instance.tubeGap) + tube.transform.localScale.x / 2, containerPos.y);
-                        tempCounter++;
-                    }
-                }
-            }
-            else
-            {
-                float temp = DataHandler.instance.tubeGap / 2;
-                for (int i = 0; i < tubeContainer.childCount; i++)
-                {
-                    if (i % 2 != 0)
-                    {
-                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x - temp, containerPos.y);
-                        temp += DataHandler.instance.tubeGap;
-                    }
-                    else
-                    {
-                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x + temp, containerPos.y);
-                    }
-                }
-            }
-
-        }
-
         void SetTubeContainerPosition()
         {
             float temp = DataHandler.instance.tubeContainerGap / 2;
@@ -156,7 +126,110 @@ namespace YugantLibrary.MiniGame.WaterSort
                 }
             }
         }
+        void SetTubePositions(Transform tubeContainer, int tubesInContainer)
+        {
+            int tempCounter = 1;
+            Vector3 containerPos = tubeContainer.transform.position;
 
+            if (tubesInContainer % 2 != 0)
+            {
+                for (int i = 1; i < tubeContainer.childCount; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x - (tempCounter * DataHandler.instance.tubeGap) - tube.transform.localScale.x / 2, containerPos.y);
+                    }
+                    else
+                    {
+                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x + (tempCounter * DataHandler.instance.tubeGap) + tube.transform.localScale.x / 2, containerPos.y);
+                        tempCounter++;
+                    }
+                }
+            }
+            else
+            {
+                float temp = DataHandler.instance.tubeGap / 2;
+                for (int i = 0; i < tubeContainer.childCount; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x - temp, containerPos.y);
+                        temp += DataHandler.instance.tubeGap;
+                    }
+                    else
+                    {
+                        tubeContainer.GetChild(i).transform.position = new Vector3(containerPos.x + temp, containerPos.y);
+                    }
+                }
+            }
+
+        }
+        #endregion
+
+
+        #region Assigning Whole Tube with Randomly Selected Color
+        void AssignColorsToEachTube()
+        {
+            int colorCount = totalTubeCount - emptyTubeCount;
+            colorsUsedInTubes = DataHandler.instance.GetRandomColor(colorCount);
+            int tubeFilledCount = colorCount;
+            int[] colorAssigned = new int[colorCount];
+
+            for (int i = 0; i < tubeContainerHolder.childCount; i++)
+            {
+                Transform tubeContainer = tubeContainerHolder.GetChild(i);
+
+                for (int j = 0; j < tubeContainer.childCount; j++)
+                {
+                    Tube tubeScript = tubeContainer.GetChild(j).GetComponent<Tube>();
+
+                    if (tubeFilledCount > 0)
+                    {
+                        //int randomIndex = Random.Range(0, colorAssigned.Length);
+
+                        do
+                        {
+                            colorAssignIndex = SelectRandomColorForTube(colorAssigned.ToList());
+                        }
+                        while (colorAssignIndex == -1);
+
+                        colorAssigned[colorAssignIndex]++;
+
+                        for (int k = 0; k < 4; k++)
+                        {
+                            SpriteRenderer spriteRenderer = tubeScript.waterPartContainer.GetChild(k).GetComponent<SpriteRenderer>();
+                            spriteRenderer.color = colorsUsedInTubes[colorAssignIndex];
+
+                        }
+
+                        tubeFilledCount--;
+                    }
+                }
+            }
+        }
+        int SelectRandomColorForTube(List<int> list)
+        {
+            colorAssignIndex = Random.Range(0, list.Count);
+            int val = list[colorAssignIndex] > 0 ? -1 : colorAssignIndex;
+            return val;
+        }
+        #endregion
+
+
+        void UseMoveToRandomizeColorsInTube()
+        {
+            int moves = totalMovesToFinishLevel;
+
+            for (int i = 0; i < moves; i++)
+            {
+
+            }
+        }
+
+
+
+
+        #region Randomly Assigning Colors To Each Part of Tube
         void AssignColorsToTubeElements()
         {
             int colorCount = totalTubeCount - emptyTubeCount;
@@ -199,6 +272,8 @@ namespace YugantLibrary.MiniGame.WaterSort
             int val = list[colorAssignIndex] >= 4 ? -1 : colorAssignIndex;
             return val;
         }
+
+        #endregion
     }
 }
 
