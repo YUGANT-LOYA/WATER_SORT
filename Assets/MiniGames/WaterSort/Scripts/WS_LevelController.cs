@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using System.Linq;
 
 namespace YugantLibrary.MiniGame.WaterSort
 {
@@ -24,6 +25,7 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         [Header("TubeColors")]
         [SerializeField] List<Color> colorsUsedInTubes;
+        int colorAssignIndex = 0;
 
         private void Awake()
         {
@@ -169,16 +171,21 @@ namespace YugantLibrary.MiniGame.WaterSort
                 for (int j = 0; j < tubeContainer.childCount; j++)
                 {
                     Tube tubeScript = tubeContainer.GetChild(j).GetComponent<Tube>();
+
                     if (tubeFilledCount > 0)
                     {
                         for (int k = 0; k < 4; k++)
                         {
                             SpriteRenderer spriteRenderer = tubeScript.waterPartContainer.GetChild(k).GetComponent<SpriteRenderer>();
 
-                            int index = SelectRandomIndex(colorAssigned);
-                            //Debug.Log("Color : " + colorsUsedInTubes[index]);
-                            spriteRenderer.color = colorsUsedInTubes[index];
-                            colorAssigned[index]++;
+                            do
+                            {
+                                colorAssignIndex = SelectRandomIndex(colorAssigned.ToList());
+                            }
+                            while (colorAssignIndex == -1);
+
+                            colorAssigned[colorAssignIndex]++;
+                            spriteRenderer.color = colorsUsedInTubes[colorAssignIndex];
                         }
                         tubeFilledCount--;
                     }
@@ -186,19 +193,12 @@ namespace YugantLibrary.MiniGame.WaterSort
             }
         }
 
-
-        int SelectRandomIndex(int[] list)
+        int SelectRandomIndex(List<int> list)
         {
-            int randomIndex = Random.Range(0, list.Length);
-
-            while (list[randomIndex] > 4)
-            {
-                return SelectRandomIndex(list);
-            }
-
-            Debug.Log($"RANDOM INDEX : {randomIndex} , COUNT : {list[randomIndex]}");
-            return randomIndex;
-
+            colorAssignIndex = Random.Range(0, list.Count);
+            int val = list[colorAssignIndex] >= 4 ? -1 : colorAssignIndex;
+            return val;
         }
     }
 }
+
