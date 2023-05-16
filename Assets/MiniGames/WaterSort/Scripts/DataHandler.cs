@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using YugantLibrary.MyCustomAttributes;
 
@@ -108,6 +107,12 @@ namespace YugantLibrary.MiniGame.WaterSort
         {
             return gameMode;
         }
+        public Color DefaultColor()
+        {
+            return Color.white;
+        }
+
+
 
 
 

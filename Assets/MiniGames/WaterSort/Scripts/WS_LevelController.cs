@@ -18,7 +18,7 @@ namespace YugantLibrary.MiniGame.WaterSort
         [Range(1, 4)]
         public int emptyTubeCount = 2;
         [BoxGroup("DIFFICULTY OF LEVEL")]
-        public DataHandler.DIFFICULTY diffcultyOfcurrLevel = DataHandler.DIFFICULTY.NONE;
+        public DataHandler.DIFFICULTY diffcultyOfCurrLevel = DataHandler.DIFFICULTY.NONE;
         [BoxGroup("DIFFICULTY OF LEVEL")]
         public int totalMovesToFinishLevel = 5;
         [BoxGroup("DIFFICULTY OF LEVEL")]
@@ -31,16 +31,28 @@ namespace YugantLibrary.MiniGame.WaterSort
         [SerializeField] List<Color> colorsUsedInTubes;
         int colorAssignIndex = 0;
 
+        [SerializeField] Tube tube1, tube2;
+        Color defaultColor;
+
+        public List<Tube> emptyTubesList = new List<Tube>();
+        public List<Tube> filledTubesList = new List<Tube>();
+
+
         private void Awake()
         {
-            if (diffcultyOfcurrLevel == DataHandler.DIFFICULTY.NONE)
+            if (diffcultyOfCurrLevel == DataHandler.DIFFICULTY.NONE)
             {
-                diffcultyOfcurrLevel = DataHandler.instance.GetCurrentDifficulty();
+                diffcultyOfCurrLevel = DataHandler.instance.GetCurrentDifficulty();
             }
-
+            defaultColor = DataHandler.instance.DefaultColor();
             Init();
             SetTubeContainerPosition();
             AssignColorsToEachTube();
+         
+        }
+
+        private void Start()
+        {
             UseMoveToRandomizeColorsInTube();
         }
 
@@ -80,7 +92,7 @@ namespace YugantLibrary.MiniGame.WaterSort
                 for (int j = 0; j < totalTubes; j++)
                 {
                     GameObject tubeObj = Instantiate(tube, tubeContainer.transform);
-                    tubeObj.name = $"Tube_{j}";
+                    tubeObj.name = $"Tube_{i}_{j}";
                 }
 
                 SetTubePositions(tubeContainer.transform, totalTubes);
@@ -185,8 +197,6 @@ namespace YugantLibrary.MiniGame.WaterSort
 
                     if (tubeFilledCount > 0)
                     {
-                        //int randomIndex = Random.Range(0, colorAssigned.Length);
-
                         do
                         {
                             colorAssignIndex = SelectRandomColorForTube(colorAssigned.ToList());
@@ -195,14 +205,25 @@ namespace YugantLibrary.MiniGame.WaterSort
 
                         colorAssigned[colorAssignIndex]++;
 
-                        for (int k = 0; k < 4; k++)
+                        for (int k = 0; k < DataHandler.instance.maxColorInTube; k++)
                         {
                             SpriteRenderer spriteRenderer = tubeScript.waterPartContainer.GetChild(k).GetComponent<SpriteRenderer>();
                             spriteRenderer.color = colorsUsedInTubes[colorAssignIndex];
 
+                            if (spriteRenderer.color != defaultColor)
+                            {
+                                tubeScript.SetOccupiedData(k, true);
+                            }
+
+                            tubeScript.AddToTubeStack(spriteRenderer.color);
                         }
 
+                        filledTubesList.Add(tubeScript);
                         tubeFilledCount--;
+                    }
+                    else
+                    {
+                        emptyTubesList.Add(tubeScript);
                     }
                 }
             }
@@ -218,16 +239,86 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         void UseMoveToRandomizeColorsInTube()
         {
-            int moves = totalMovesToFinishLevel;
 
-            for (int i = 0; i < moves; i++)
+            for (int i = 0; i < totalMovesToFinishLevel; i++)
             {
-
+                SelectTwoRandomTubes();
+                //MixColor(tube1, tube2);
             }
+
+            //MoveEmptyTubesAtEnd();
         }
 
+        void SelectTwoRandomTubes()
+        {
+            int count = 0;
+            tube1 = GetFilledTube();
 
+            while (!tube1.GetOccupiedData())
+            {
+                count++;
+                tube1 = GetFilledTube();
+            }
 
+            tube2 = GetEmptyTube();
+
+            while (tube2.GetOccupiedData())
+            {
+                count++;
+                tube2 = GetEmptyTube();
+            }
+
+            count++;
+            Debug.Log("Count : " + count);
+        }
+
+        void MixColor(Tube tubeScript1, Tube tubeScript2)
+        {
+            //Debug.Log("Tube 1 Index : " + (tubeScript1.GetTopSlotTubeIndex()));
+            tubeScript2.AddToTubeStack(tubeScript1.GetTubeTopColor());
+            //Debug.Log("Tube 2 Index : " + (tubeScript2.GetTopSlotTubeIndex()));
+            tubeScript1.RemoveTopTubeStack();
+
+            if (tubeScript1.GetTopSlotTubeIndex() == 0)
+            {
+                filledTubesList.Remove(tubeScript1);
+                emptyTubesList.Add(tubeScript1);
+            }
+            else if (tubeScript2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
+            {
+                filledTubesList.Add(tubeScript2);
+                emptyTubesList.Remove(tubeScript2);
+            }
+
+        }
+        void MoveEmptyTubesAtEnd()
+        {
+
+        }
+        Tube GetFilledTube()
+        {
+            int index = Random.Range(0, filledTubesList.Count);
+            Tube tubeScript = filledTubesList[index];
+
+            return tubeScript;
+        }
+
+        Tube GetEmptyTube()
+        {
+            if (tube2 == null || tube2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
+            {
+                Debug.Log("Tube 2 Changing");
+                int index = Random.Range(0, emptyTubesList.Count);
+                Tube tubeScript = emptyTubesList[index];
+                return tubeScript;
+            }
+            else
+            {
+                Debug.Log("Tube 2 Remains Unchanged");
+                return tube2;
+            }
+
+        }
 
         #region Randomly Assigning Colors To Each Part of Tube
         void AssignColorsToTubeElements()

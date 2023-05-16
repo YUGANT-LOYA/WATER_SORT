@@ -313,7 +313,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 177258356142060583}
+  - {fileID: 7937395132499570673}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -930,7 +930,7 @@ MonoBehaviour:
   levelPrefix: Level_
   totalLevels: 5
   levelContainer: {fileID: 321280516}
-  currLevel: {fileID: 177258356142060760}
+  currLevel: {fileID: 7937395132499570446}
   isTesting: 1
   currLevelId: 3
 --- !u!4 &1168677707
@@ -979,7 +979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prevButton: {fileID: 1871243276}
   nextButton: {fileID: 1936652180}
-  replayButton: {fileID: 0}
+  replayButton: {fileID: 685347310}
 --- !u!4 &1298885002
 Transform:
   m_ObjectHideFlags: 0
@@ -1400,42 +1400,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1936652178}
   m_CullTransparentMesh: 1
---- !u!114 &177258356142060582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 177258356142060760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03f14e39e36938643bd4b5668105345b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
-  totalTubeCount: 6
-  customizeEmptyTubes: 1
-  emptyTubeCount: 1
-  diffcultyOfcurrLevel: 0
-  tubeContainerHolder: {fileID: 8828492035670297209}
-  colorsUsedInTubes: []
---- !u!4 &177258356142060583
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 177258356142060760}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8828492035670297209}
-  m_Father: {fileID: 321280516}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &177258356142060760
+--- !u!1 &1646047949976916384
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1443,24 +1408,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 177258356142060583}
-  - component: {fileID: 177258356142060582}
-  m_Layer: 0
-  m_Name: Level_1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &8828492035670297206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8828492035670297209}
+  - component: {fileID: 1646047949976916399}
   m_Layer: 0
   m_Name: TubeConatinerHolder
   m_TagString: Untagged
@@ -1468,18 +1416,76 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8828492035670297209
+--- !u!4 &1646047949976916399
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8828492035670297206}
+  m_GameObject: {fileID: 1646047949976916384}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 177258356142060583}
+  m_Father: {fileID: 7937395132499570673}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7937395132499570446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7937395132499570673}
+  - component: {fileID: 7937395132499570672}
+  m_Layer: 0
+  m_Name: Level_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &7937395132499570672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7937395132499570446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f14e39e36938643bd4b5668105345b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalTubeCount: 7
+  customizeEmptyTubes: 1
+  emptyTubeCount: 1
+  diffcultyOfCurrLevel: 0
+  totalMovesToFinishLevel: 3
+  levelTimer: 0
+  tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
+  tubeContainerHolder: {fileID: 1646047949976916399}
+  colorsUsedInTubes: []
+  tube1: {fileID: 0}
+  tube2: {fileID: 0}
+  emptyTubesList: []
+  filledTubesList: []
+--- !u!4 &7937395132499570673
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7937395132499570446}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1646047949976916399}
+  m_Father: {fileID: 321280516}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

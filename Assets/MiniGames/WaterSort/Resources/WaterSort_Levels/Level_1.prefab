@@ -76,10 +76,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03f14e39e36938643bd4b5668105345b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
-  totalTubeCount: 6
+  totalTubeCount: 7
   customizeEmptyTubes: 1
   emptyTubeCount: 1
-  diffcultyOfcurrLevel: 0
+  diffcultyOfCurrLevel: 0
+  totalMovesToFinishLevel: 3
+  levelTimer: 0
+  tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
   tubeContainerHolder: {fileID: 2435957345787348700}
   colorsUsedInTubes: []
+  tube1: {fileID: 0}
+  tube2: {fileID: 0}
+  emptyTubesList: []
+  filledTubesList: []
