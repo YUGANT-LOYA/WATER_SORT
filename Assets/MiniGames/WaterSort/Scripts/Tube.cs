@@ -29,22 +29,16 @@ namespace YugantLibrary.MiniGame.WaterSort
             return tubeIndex;
         }
 
-        public void SetTopSlotTubeIndex(int index)
-        {
-            tubeIndex = index;
-        }
-
         public void AddToTubeStack(Color color)
         {
-            Debug.Log("ADD Tube index Before : " + GetTopSlotTubeIndex());
             tubeColorStack.Push(color);
-            SetOccupiedData(GetTopSlotTubeIndex(), true);
+            GetTubeIndexToStackCount();
+            SetOccupiedData(GetTopSlotTubeIndex(), true); 
             waterPartContainer.transform.GetChild(GetTopSlotTubeIndex()).GetComponent<SpriteRenderer>().color = color;
-            SetTubeIndexToStackCount();
             Debug.Log("ADD Tube index After : " + GetTopSlotTubeIndex());
         }
 
-        void SetTubeIndexToStackCount()
+        void GetTubeIndexToStackCount()
         {
             tubeIndex = tubeColorStack.Count - 1;
         }
@@ -55,16 +49,14 @@ namespace YugantLibrary.MiniGame.WaterSort
             waterPartContainer.transform.GetChild(GetTopSlotTubeIndex()).GetComponent<SpriteRenderer>().color = defaultColor;
             SetOccupiedData(GetTopSlotTubeIndex(), false);
             tubeColorStack.Pop();
-            SetTubeIndexToStackCount();
+            GetTubeIndexToStackCount();
             Debug.Log("REMOVE Tube index After : " + GetTopSlotTubeIndex());
         }
 
         public bool GetOccupiedData()
         {
-
             Debug.Log($"is Occupied {isOccupied[GetTopSlotTubeIndex()]}");
             return isOccupied[GetTopSlotTubeIndex()];
-
         }
 
         public void SetOccupiedData(int index, bool booleanVal)

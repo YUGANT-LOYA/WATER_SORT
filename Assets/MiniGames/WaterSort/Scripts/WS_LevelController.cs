@@ -243,7 +243,7 @@ namespace YugantLibrary.MiniGame.WaterSort
             for (int i = 0; i < totalMovesToFinishLevel; i++)
             {
                 SelectTwoRandomTubes();
-                //MixColor(tube1, tube2);
+                MixColor(tube1, tube2);
             }
 
             //MoveEmptyTubesAtEnd();
@@ -262,7 +262,7 @@ namespace YugantLibrary.MiniGame.WaterSort
 
             tube2 = GetEmptyTube();
 
-            while (tube2.GetOccupiedData())
+            while (tube1 == tube2 || tube2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
             {
                 count++;
                 tube2 = GetEmptyTube();
@@ -274,17 +274,16 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         void MixColor(Tube tubeScript1, Tube tubeScript2)
         {
-            //Debug.Log("Tube 1 Index : " + (tubeScript1.GetTopSlotTubeIndex()));
             tubeScript2.AddToTubeStack(tubeScript1.GetTubeTopColor());
-            //Debug.Log("Tube 2 Index : " + (tubeScript2.GetTopSlotTubeIndex()));
             tubeScript1.RemoveTopTubeStack();
 
-            if (tubeScript1.GetTopSlotTubeIndex() == 0)
+            if (tubeScript1.GetTopSlotTubeIndex() == -1)
             {
                 filledTubesList.Remove(tubeScript1);
                 emptyTubesList.Add(tubeScript1);
             }
-            else if (tubeScript2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
+            
+            if (tubeScript2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
             {
                 filledTubesList.Add(tubeScript2);
                 emptyTubesList.Remove(tubeScript2);
