@@ -9,9 +9,6 @@ namespace YugantLibrary.MiniGame.WaterSort
     public class WS_LevelController : MonoBehaviour
     {
         [BoxGroup("DIFFICULTY OF LEVEL")]
-        public bool generateLevelRandomly = true;
-
-        [BoxGroup("DIFFICULTY OF LEVEL")]
         [Range(3, 16)]
         public int totalTubeCount;
         [BoxGroup("DIFFICULTY OF LEVEL")]
@@ -40,6 +37,7 @@ namespace YugantLibrary.MiniGame.WaterSort
         public List<Tube> emptyTubesList = new List<Tube>();
         public List<Tube> filledTubesList = new List<Tube>();
 
+
         private void Awake()
         {
             if (diffcultyOfCurrLevel == DataHandler.DIFFICULTY.NONE)
@@ -47,19 +45,15 @@ namespace YugantLibrary.MiniGame.WaterSort
                 diffcultyOfCurrLevel = DataHandler.instance.GetCurrentDifficulty();
             }
             defaultColor = DataHandler.instance.DefaultColor();
-
-            if (generateLevelRandomly)
-            {
-                Init();
-                SetTubeContainerPosition();
-                AssignColorsToEachTube();
-                UseMoveToRandomizeColorsInTube();
-            }
+            Init();
+            SetTubeContainerPosition();
+            AssignColorsToEachTube();
+         
         }
 
         private void Start()
         {
-           
+            UseMoveToRandomizeColorsInTube();
         }
 
         #region Creating Tubes at RunTime with Given Data
@@ -216,6 +210,11 @@ namespace YugantLibrary.MiniGame.WaterSort
                             SpriteRenderer spriteRenderer = tubeScript.waterPartContainer.GetChild(k).GetComponent<SpriteRenderer>();
                             spriteRenderer.color = colorsUsedInTubes[colorAssignIndex];
 
+                            if (spriteRenderer.color != defaultColor)
+                            {
+                                tubeScript.SetOccupiedData(k, true);
+                            }
+
                             tubeScript.AddToTubeStack(spriteRenderer.color);
                         }
 
@@ -240,57 +239,43 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         void UseMoveToRandomizeColorsInTube()
         {
-            SelectTube1();
-            SelectTube2();
 
             for (int i = 0; i < totalMovesToFinishLevel; i++)
             {
-                if (emptyTubesList.Count > 0)
-                {
-                    Debug.Log("Mixing Color Count : " + i);
-                    SelectTube1();
-
-                    if (tube2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
-                    {
-                        SelectTube2();
-                    }
-
-                    Debug.Log("Tube 1 : " + tube1.name);
-                    Debug.Log("Tube 2 : " + tube2.name);
-
-                    MixColor(tube1, tube2);
-                }
+                SelectTwoRandomTubes();
+                MixColor(tube1, tube2);
             }
 
             //MoveEmptyTubesAtEnd();
         }
 
-        void SelectTube1()
+        void SelectTwoRandomTubes()
         {
+            int count = 0;
             tube1 = GetFilledTube();
 
-            while (!tube1.GetOccupiedData() || tube1 == tube2)
+            while (!tube1.GetOccupiedData())
             {
+                count++;
                 tube1 = GetFilledTube();
             }
-        }
 
-        void SelectTube2()
-        {
             tube2 = GetEmptyTube();
 
-            while (tube1 == tube2)
+            while (tube1 == tube2 || tube2.GetTopSlotTubeIndex() == DataHandler.instance.maxColorInTube - 1)
             {
+                count++;
                 tube2 = GetEmptyTube();
             }
+
+            count++;
+            Debug.Log("Count : " + count);
         }
 
         void MixColor(Tube tubeScript1, Tube tubeScript2)
         {
             tubeScript2.AddToTubeStack(tubeScript1.GetTubeTopColor());
             tubeScript1.RemoveTopTubeStack();
-
-            emptyTubesList.Add(tubeScript1);
 
             if (tubeScript1.GetTopSlotTubeIndex() == -1)
             {
@@ -313,6 +298,7 @@ namespace YugantLibrary.MiniGame.WaterSort
         {
             int index = Random.Range(0, filledTubesList.Count);
             Tube tubeScript = filledTubesList[index];
+
             return tubeScript;
         }
 
