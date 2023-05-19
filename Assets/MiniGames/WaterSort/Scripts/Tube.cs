@@ -6,11 +6,30 @@ namespace YugantLibrary.MiniGame.WaterSort
 {
     public class Tube : MonoBehaviour
     {
+        WS_LevelController levelController;
         public Transform waterPartContainer;
         [SerializeField] Stack<Color> tubeColorStack;
         [SerializeField] bool[] isOccupied;
         [SerializeField] int tubeIndex = 0;
         Color defaultColor;
+
+        public delegate void AddingColorDelegate();
+        AddingColorDelegate addingColorEvent;
+
+        public delegate void RemovingColorDelgate();
+        RemovingColorDelgate removingColorEvent;
+
+        private void OnEnable()
+        {
+            addingColorEvent += OnAddingColor;
+            removingColorEvent += OnRemovingColor;
+        }
+
+        private void OnDisable()
+        {
+            addingColorEvent -= OnAddingColor;
+            removingColorEvent -= OnRemovingColor;
+        }
 
         public void Awake()
         {
@@ -21,6 +40,7 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         public Color GetTubeTopColor()
         {
+           // levelController.AddTubeEvent;
             return tubeColorStack.Peek();
         }
 
@@ -32,10 +52,21 @@ namespace YugantLibrary.MiniGame.WaterSort
         public void AddToTubeStack(Color color)
         {
             tubeColorStack.Push(color);
-            GetTubeIndexToStackCount();
-            SetOccupiedData(GetTopSlotTubeIndex(), true); 
+            addingColorEvent?.Invoke();
             waterPartContainer.transform.GetChild(GetTopSlotTubeIndex()).GetComponent<SpriteRenderer>().color = color;
-            Debug.Log("ADD Tube index After : " + GetTopSlotTubeIndex());
+        }
+
+        void OnAddingColor()
+        {
+            GetTubeIndexToStackCount();
+            SetOccupiedData(GetTopSlotTubeIndex(), true);
+
+        }
+
+        void OnRemovingColor()
+        {
+            SetOccupiedData(GetTopSlotTubeIndex(), false);
+            GetTubeIndexToStackCount();
         }
 
         void GetTubeIndexToStackCount()
@@ -45,17 +76,13 @@ namespace YugantLibrary.MiniGame.WaterSort
 
         public void RemoveTopTubeStack()
         {
-            Debug.Log("REMOVE Tube index Before : " + GetTopSlotTubeIndex());
             waterPartContainer.transform.GetChild(GetTopSlotTubeIndex()).GetComponent<SpriteRenderer>().color = defaultColor;
-            SetOccupiedData(GetTopSlotTubeIndex(), false);
+            removingColorEvent?.Invoke();
             tubeColorStack.Pop();
-            GetTubeIndexToStackCount();
-            Debug.Log("REMOVE Tube index After : " + GetTopSlotTubeIndex());
         }
 
         public bool GetOccupiedData()
         {
-            Debug.Log($"is Occupied {isOccupied[GetTopSlotTubeIndex()]}");
             return isOccupied[GetTopSlotTubeIndex()];
         }
 
