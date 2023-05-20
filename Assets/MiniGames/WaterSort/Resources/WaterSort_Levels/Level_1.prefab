@@ -83,10 +83,8 @@ MonoBehaviour:
   diffcultyOfCurrLevel: 0
   totalMovesToFinishLevel: 24
   levelTimer: 0
-  tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
+  tubePrefab: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
   tubeContainerHolder: {fileID: 2435957345787348700}
   colorsUsedInTubes: []
-  tube1: {fileID: 0}
-  tube2: {fileID: 0}
   emptyTubesList: []
   filledTubesList: []

@@ -454,7 +454,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 153694810}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1467,11 +1467,11 @@ MonoBehaviour:
   diffcultyOfCurrLevel: 0
   totalMovesToFinishLevel: 24
   levelTimer: 0
-  tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
+  tubePrefab: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
   tubeContainerHolder: {fileID: 1646047949976916399}
   colorsUsedInTubes: []
-  tube1: {fileID: 0}
-  tube2: {fileID: 0}
+  Tube1: {fileID: 0}
+  Tube2: {fileID: 0}
   emptyTubesList: []
   filledTubesList: []
 --- !u!4 &7937395132499570673
