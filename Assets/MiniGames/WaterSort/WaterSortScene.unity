@@ -462,7 +462,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 31
+  m_AdditionalShaderChannelsFlag: -1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1460,11 +1460,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03f14e39e36938643bd4b5668105345b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalTubeCount: 16
+  generateLevelRandomly: 1
+  totalTubeCount: 10
   customizeEmptyTubes: 1
-  emptyTubeCount: 3
+  emptyTubeCount: 1
   diffcultyOfCurrLevel: 0
-  totalMovesToFinishLevel: 8
+  totalMovesToFinishLevel: 24
   levelTimer: 0
   tube: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
   tubeContainerHolder: {fileID: 1646047949976916399}
