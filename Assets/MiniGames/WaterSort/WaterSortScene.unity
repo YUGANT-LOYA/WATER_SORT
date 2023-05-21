@@ -1461,11 +1461,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generateLevelRandomly: 1
-  totalTubeCount: 10
+  totalTubeCount: 8
   customizeEmptyTubes: 1
   emptyTubeCount: 1
   diffcultyOfCurrLevel: 0
-  totalMovesToFinishLevel: 24
+  totalMovesToFinishLevel: 8
   levelTimer: 0
   tubePrefab: {fileID: 2487070219357758781, guid: 5ce94782712661045b98d3859fcfa03d, type: 3}
   tubeContainerHolder: {fileID: 1646047949976916399}
